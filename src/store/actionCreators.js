@@ -1,12 +1,14 @@
 import {
   CHANGE_INPUT_VALUE,
-  ADD_TODO_ITEM,
+  ADD_STUDENT_ITEM,
+  EDIT_STUDENT_ITEM,
   DELETE_TODO_ITEM,
   INIT_LIST_ACTION,
   SHOW_REGISTER_MODAL,
   CLOSE_REGISTER_MODAL,
   HANDLE_MODAL_FORM_INPUT_CHANGE,
   GET_INIT_LIST,
+  SHOW_EDIT_MODAL,
 } from './actionTypes.js';
 import { type } from 'os';
 
@@ -25,9 +27,9 @@ export const modalInputChangeAction = (value, name) => ({
 //   type: ADD_TODO_ITEM,
 // });
 
-export const getDeleteItemAction = id => ({
+export const DeleteItemAction = item => ({
   type: DELETE_TODO_ITEM,
-  id,
+  item,
 });
 
 export const initListAction = data => ({
@@ -48,8 +50,18 @@ export const getInitList = () => ({
 });
 
 export const addItemAction = item => ({
-  type: ADD_TODO_ITEM,
+  type: ADD_STUDENT_ITEM,
   item,
+});
+
+export const editItemAction = newData => ({
+  type: EDIT_STUDENT_ITEM,
+  newData,
+});
+
+export const showEditModal = id => ({
+  type: SHOW_EDIT_MODAL,
+  id,
 });
 
 //thunk用法

@@ -10,30 +10,24 @@ import {
   InputGroup,
   Table,
 } from 'react-bootstrap';
-import store from '../../store/index.js';
+import store from '../store/index.js';
 import {
   CHANGE_INPUT_VALUE,
   ADD_TODO_ITEM,
   DELETE_TODO_ITEM,
-} from '../../store/actionTypes.js';
+} from '../store/actionTypes.js';
 import {
   getTodoList,
   getInputChangeAction,
-  getDeleteItemAction,
+  DeleteItemAction,
   initListAction,
   showregistermodal,
   getInitList,
-} from '../../store/actionCreators.js';
+  showEditModal,
+} from '../store/actionCreators.js';
 import { FaPlus, FaPen, FaTrashAlt } from 'react-icons/fa';
 import StudentModal from './StudentModal.js';
-
-// const data = [
-//   { id: 101, name: 'Racing car sprays burning fuel into crowd.' },
-//   { id: 102, name: 'Japanese princess to wed commoner.' },
-//   { id: 103, name: 'Australian walks 100km after outback crash.' },
-//   { id: 104, name: 'Man charged over missing wedding girl.' },
-//   { id: 105, name: 'Los Angeles battles huge wildfires.' },
-// ];
+import { Link, Redirect, withRouter } from 'react-router-dom';
 
 class TodoList extends React.Component {
   constructor(props) {
@@ -94,8 +88,14 @@ class TodoList extends React.Component {
     store.dispatch(action);
   };
 
-  handleItemDelete = id => () => {
-    const action = getDeleteItemAction(id);
+  handleItemDelete = item => () => {
+    const action = DeleteItemAction(item);
+    store.dispatch(action);
+  };
+
+  // 開啟編輯用的跳出視窗
+  handleEditModalShow = id => () => {
+    const action = showEditModal(id);
     store.dispatch(action);
   };
 
@@ -145,20 +145,29 @@ class TodoList extends React.Component {
                       <td>{item.id}</td>
                       <td>{item.name}</td>
                       <td>{item.birth}</td>
+
                       <td>
                         <Button
-                          variant="warning"
+                          variant="warning ml-1"
                           size="sm"
-                          // onClick={this.handleEditModalShow(item.id)}
+                          onClick={this.handleEditModalShow(item.id)}
                         >
                           <FaPen /> 編輯
                         </Button>
                         <Button
-                          variant="danger"
+                          variant="danger ml-1"
                           size="sm"
-                          onClick={this.handleItemDelete(item.id)}
+                          onClick={this.handleItemDelete(item)}
                         >
                           <FaTrashAlt /> 刪除
+                        </Button>
+                        <Button variant="success ml-1">
+                          <Link
+                            to={'/student/' + item.id}
+                            className="text-body "
+                          >
+                            詳細頁面
+                          </Link>
                         </Button>
                       </td>
                     </tr>
@@ -173,4 +182,4 @@ class TodoList extends React.Component {
   }
 }
 
-export default TodoList;
+export default withRouter(TodoList);

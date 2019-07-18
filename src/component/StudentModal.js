@@ -1,11 +1,12 @@
 import React from 'react';
-import store from '../../store/index.js';
+import store from '../store/index.js';
 import { Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import {
   closeRegisterModal,
   modalInputChangeAction,
   addItemAction,
-} from '../../store/actionCreators.js';
+  editItemAction,
+} from '../store/actionCreators.js';
 
 class StudentModal extends React.Component {
   constructor(props) {
@@ -27,24 +28,32 @@ class StudentModal extends React.Component {
   };
 
   handleModalFormInputChange = e => {
-    // 注意：id(學號)與生日，需先轉為數字類型再進入state中
-    // if (name === 'id' || name === 'birth') value = +value;
     const action = modalInputChangeAction(e.target.value, e.target.name);
-
     store.dispatch(action);
-
-    // this.setState({ [name]: value });
   };
 
   handleBtnClickSave = () => {
+    if (this.state.disableIdField) {
+      const newData = {
+        id: this.state.id,
+        name: this.state.name,
+        birth: this.state.birth,
+      };
+
+      console.log(newData);
+      const action = editItemAction(newData);
+      store.dispatch(action);
+      return;
+    }
+
     // 注意：id(學號)與生日，需先轉為數字類型再進入state中
     const item = {
       id: +this.state.id,
       name: this.state.name,
       birth: +this.state.birth,
     };
-    const stateList = this.state.list;
-    console.log(stateList);
+    // const stateList = this.state.list;
+    // console.log(stateList);
 
     const action = addItemAction(item);
     console.log(action);
@@ -69,7 +78,7 @@ class StudentModal extends React.Component {
               </InputGroup.Prepend>
               <FormControl
                 name="id"
-                // disabled={this.state.disableIdField}
+                disabled={this.state.disableIdField}
                 value={
                   /* 因為this.state預設為0，不要該數字0出現，應該是出現空白字串 */
                   this.state.id ? this.state.id : ''
@@ -109,7 +118,7 @@ class StudentModal extends React.Component {
             <br />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.state.handleClose}>
+            <Button variant="secondary" onClick={this.handleModalClose}>
               關閉
             </Button>
             <Button variant="primary" onClick={this.handleBtnClickSave}>

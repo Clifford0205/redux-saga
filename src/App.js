@@ -1,12 +1,26 @@
 import React from 'react';
-// import Select from './component/old/select';
-import TodoList from './component/redux/TodoList';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  NavLink,
+} from 'react-router-dom';
+import TodoList from './component/TodoList';
+import studentDetail from './page/studentDetail';
 
 function App() {
   return (
     <>
-      <TodoList />
+      <Router>
+        <>
+          <Switch>
+            <Route exact path="/" component={TodoList} />
+            <Route path="/student/:id" component={studentDetail} />
+            {/* <Route path="/student" component={Student} /> */}
+          </Switch>
+        </>
+      </Router>
     </>
   );
 }

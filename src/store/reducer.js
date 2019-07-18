@@ -1,17 +1,20 @@
 import {
   INIT_LIST_ACTION,
   CHANGE_INPUT_VALUE,
-  ADD_TODO_ITEM,
-  DELETE_TODO_ITEM,
   SHOW_REGISTER_MODAL,
   CLOSE_REGISTER_MODAL,
   HANDLE_MODAL_FORM_INPUT_CHANGE,
+  SHOW_EDIT_MODAL,
 } from './actionTypes.js';
 
 const defaultState = {
   inputValue: '',
+  // 學生的資料，注意應該預設值是空陣列，而不是null或空物件
   list: [],
+  //Modal的開關狀態
   showModal: false,
+  // 控制是否讓學號(id)欄位變為不可變更(disabled)
+  disableIdField: false,
   // 給跳出視窗中的表單欄位對照變動用的state
   // 預設資料應該為要處理的各種資料類型的初始值
   id: 0,
@@ -63,16 +66,30 @@ export default (state = defaultState, action) => {
   //   return newState;
   // }
 
-  if (action.type === DELETE_TODO_ITEM) {
-    const newState = JSON.parse(JSON.stringify(state));
-    const arr = newState.list.filter(item => item.id !== action.id);
-    newState.list = arr;
-    console.log(newState.list);
-    return newState;
-  }
+  // if (action.type === DELETE_TODO_ITEM) {
+  //   const newState = JSON.parse(JSON.stringify(state));
+  //   const arr = newState.list.filter(item => item.id !== action.id);
+  //   newState.list = arr;
+  //   console.log(newState.list);
+  //   return newState;
+  // }
 
   if (action.type === SHOW_REGISTER_MODAL) {
     const newState = JSON.parse(JSON.stringify(state));
+    newState.disableIdField = false;
+    newState.showModal = true;
+    return newState;
+  }
+
+  if (action.type === SHOW_EDIT_MODAL) {
+    const newState = JSON.parse(JSON.stringify(state));
+    console.log(action.id);
+    const item = newState.list.find(item => item.id === action.id);
+    console.log(item);
+    newState.id = item.id;
+    newState.name = item.name;
+    newState.birth = item.birth;
+    newState.disableIdField = true;
     newState.showModal = true;
     return newState;
   }
@@ -80,6 +97,9 @@ export default (state = defaultState, action) => {
   if (action.type === CLOSE_REGISTER_MODAL) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.showModal = false;
+    newState.id = 0;
+    newState.name = '';
+    newState.birth = 0;
     return newState;
   }
 
