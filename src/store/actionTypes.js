@@ -1,4 +1,5 @@
 export const CHANGE_INPUT_VALUE = 'change_input_value';
+export const SEARCH_VALUE_CHANGE = 'search_value_change';
 export const ADD_STUDENT_ITEM = 'add_student_item';
 export const DELETE_TODO_ITEM = 'delete_todo_item';
 export const INIT_LIST_ACTION = 'init_list_action';

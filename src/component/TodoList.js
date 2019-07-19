@@ -19,6 +19,7 @@ import {
 import {
   getTodoList,
   getInputChangeAction,
+  searchChangeAction,
   DeleteItemAction,
   initListAction,
   showregistermodal,
@@ -42,52 +43,31 @@ class TodoList extends React.Component {
     // console.log('store change');
   };
 
-  //使用 thunk處理的模式
-  // componentDidMount() {
-  //   const action = getTodoList();
-  //   store.dispatch(action);
-  // }
-
+  //生命週期:一開始載入資料
   componentDidMount() {
     const action = getInitList();
     store.dispatch(action);
-    // console.log(action);
-    // try {
-    //   const response = await fetch('http://localhost:5555/students', {
-    //     method: 'GET',
-    //     headers: new Headers({
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json',
-    //     }),
-    //   });
-    //   // if (!response.ok) throw new Error(response.statusText);
-    //   const jsonObject = await response.json();
-    //   const action = initListAction(jsonObject);
-    //   await store.dispatch(action);
-    //   // console.log(jsonObject);
-    //   // const action = initListAction(jsonObject);
-    // } catch (e) {
-    //   console.log(e);
-    // } finally {
-    // }
   }
 
+  //編輯 註冊的欄位值改變
   handleInputChange = e => {
     const action = getInputChangeAction(e.target.value);
-
     store.dispatch(action);
-    // console.log(e.target.value);
   };
 
-  // handleItemDelete = id => () => {
-  //   const action = getDeleteItemAction(id);
-  //   store.dispatch(action);
-  // };
+  // 處理搜尋字串的填寫，因為是可控元件
+  handleSearchTextChange = e => {
+    const action = searchChangeAction(e.target.value);
+    store.dispatch(action);
+  };
+
+  //控制modal出現
   handleAddModalShow = () => {
     const action = showregistermodal();
     store.dispatch(action);
   };
 
+  //刪除一整列
   handleItemDelete = item => () => {
     const action = DeleteItemAction(item);
     store.dispatch(action);
@@ -100,6 +80,14 @@ class TodoList extends React.Component {
   };
 
   render() {
+    let data = this.state.list;
+
+    if (this.state.searchText && this.state.searchText.trim() !== '') {
+      data = this.state.list.filter(item => {
+        return item.name.includes(this.state.searchText);
+      });
+    }
+
     return (
       <>
         <StudentModal />
@@ -140,7 +128,7 @@ class TodoList extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.list.map(item => (
+                  {data.map(item => (
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.name}</td>

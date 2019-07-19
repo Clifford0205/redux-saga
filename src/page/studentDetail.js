@@ -17,7 +17,7 @@ class studentDetail extends React.Component {
 
   render() {
     const studentData = this.state.list.find(
-      item => item.id === +this.match.params.id
+      item => item.id === +this.props.match.params.id
     );
     console.log(studentData);
     return (

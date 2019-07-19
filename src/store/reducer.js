@@ -1,5 +1,6 @@
 import {
   INIT_LIST_ACTION,
+  SEARCH_VALUE_CHANGE,
   CHANGE_INPUT_VALUE,
   SHOW_REGISTER_MODAL,
   CLOSE_REGISTER_MODAL,
@@ -20,6 +21,8 @@ const defaultState = {
   id: 0,
   name: '',
   birth: 0,
+  // 搜尋用的字串，可控元件使用
+  searchText: '',
 };
 
 //reducer 可以接受state, 但絕不能修改state
@@ -44,35 +47,18 @@ export default (state = defaultState, action) => {
     return newState;
   }
 
+  if (action.type === SEARCH_VALUE_CHANGE) {
+    const newState = JSON.parse(JSON.stringify(state));
+    newState.searchText = action.value;
+    console.log(newState.searchText);
+    return newState;
+  }
+
   if (action.type === INIT_LIST_ACTION) {
     const newState = JSON.parse(JSON.stringify(state));
     newState.list = action.data;
     return newState;
   }
-
-  // if (action.type === ADD_TODO_ITEM) {
-  //   const newState = JSON.parse(JSON.stringify(state));
-  //   const item = {
-  //     id: state.id,
-  //     name: state.name,
-  //     birth: state.birth,
-  //   };
-  //   newState.list = [item, ...newState.list];
-  //   // newState.list.push(newState.inputValue);
-  //   newState.id = 0;
-  //   newState.name = '';
-  //   newState.birth = 0;
-  //   newState.showModal = false;
-  //   return newState;
-  // }
-
-  // if (action.type === DELETE_TODO_ITEM) {
-  //   const newState = JSON.parse(JSON.stringify(state));
-  //   const arr = newState.list.filter(item => item.id !== action.id);
-  //   newState.list = arr;
-  //   console.log(newState.list);
-  //   return newState;
-  // }
 
   if (action.type === SHOW_REGISTER_MODAL) {
     const newState = JSON.parse(JSON.stringify(state));
